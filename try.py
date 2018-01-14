@@ -1,6 +1,6 @@
 import telebot
 import re
-token = "489178856:AAFWlsgZCc-uh_em5e4v-wsLAoP8vX29V44"
+token = ""
 bot = telebot.TeleBot(token)
 slovar = ['БЛИН','БЛЕИН']
 locat = []
