@@ -1,10 +1,10 @@
 import telebot
 import re
 import function
-globalS = ['localhost','rooting','123123','bot','utf8mb4']
+globalC = ['localhost','rooting','123123','bot','utf8mb4']
 token = ""
 bot = telebot.TeleBot(token)
-slovar = ['БЛИН','БЛЕИН']
+slovar = ['БЛЯДЬ','БЛЯТЬ','ЕБАТЬ','ЕБАЛ','ХУЙ','ЧЛЕН','ПИЗДА','ЕБАНЫЙ','ПИЗДЕЦ','СУЧИЙ','АХУЕ','ВПАДЛУ','ХЕР','ХРЕН','НАБУХАЛАСЬ','СПИЗДНУТЬ','НАЕБЕНИТЬСЯ','ГИТЛЕР','НАХУЙ','ЖОПА','БЛЯ','СУКА','БЛЯЯ','ОТПИЗДИТЬ','ПИЗДИТЬ','ОТПИЗЖУ','ПИЗДИЛИ','ПОПИЗЖУ','СПИЗДИЛИ','НАФИГ','ЗАЕБИСЬ','БЛИН','ПРИКОЛ','БЛЕИН']
 endText = ''
 
 
@@ -31,16 +31,23 @@ def handel_text(message):
     countWord = len(allWord)
     print(countWord)
     longRes = len(result)
+
     messageText = [firs_name,last_name,'(',username,')','отправил: ']
+    if messageText[0]== None:
+        messageText.pop(0)
     if messageText[1]== None:
         messageText.pop(1)
+    if messageText[2]== None:
+        messageText.pop(2)
+    if messageText[3]== None:
+        messageText.pop(3)
     for i in range(0, longRes):
         for j in range(0, len(slovar)):
             if result[i] == slovar[j]:
                 result[i] = 'фунтик'
                 badWord +=1
                 flag = True
-                print('Сообщение удалено')
+
     if flag == True:
        result2 = ' '.join(result)
        result2 =result2.lower()
@@ -48,7 +55,12 @@ def handel_text(message):
        endText2 = endText + ' '+ result2
        bot.send_message(chatId, endText2)
        bot.delete_message(chatId, messageId)
-    idUser = function.selectColumnDB(globalS,'idUser')
+       print('Сообщение удалено')
+
+
+
+
+    idUser = function.selectColumnDB(globalC,'idUser')
     goodWord = countWord - badWord
     print(idUser)
     print(len(idUser))
@@ -62,14 +74,17 @@ def handel_text(message):
             memberId = True
         else:
             memberId = False
+            break
 
     if memberId == False:
+
+        function.update(globalC,str(userId),str(username),str(countWord),str(badWord),str(goodWord))
         print("Этот пользователь уже есть в записях")
     else:
         stat =(badWord/countWord)*100
-        args = [(str(userId), str(username), str(countWord), str(goodWord), str(badWord), str(int(stat)))]
+        args = [(str(userId), str(username), str(countWord), str(badWord), str(goodWord), str(int(stat)))]
         print(args)
-        tets = function.insertDB(globalS,args)
+        tets = function.insertDB(globalC,args)
         print(tets)
 
 
